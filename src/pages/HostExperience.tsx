@@ -205,7 +205,7 @@ const HostExperience = () => {
                   <Input
                     type="number"
                     name="price"
-                    placeholder="Price"
+                    placeholder="Price per person (₹)"
                     value={formData.price}
                     onChange={handleInputChange}
                     required
