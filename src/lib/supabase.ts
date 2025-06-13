@@ -13,4 +13,8 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_KEY, {
     persistSession: true,
     autoRefreshToken: true,
   },
+  storage: {
+    maxRetryCount: 3,
+    retryInterval: 1000,
+  }
 }); 

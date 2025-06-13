@@ -575,6 +575,63 @@ export type Database = {
           },
         ]
       }
+      provider_applications: {
+        Row: {
+          id: string
+          company_name: string
+          email: string
+          contact_no: string
+          experience_name: string
+          description: string
+          price: number
+          location: string
+          duration: string
+          participants: string
+          date: string
+          category: string
+          image_url: string | null
+          status: 'pending' | 'approved' | 'rejected'
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          company_name: string
+          email: string
+          contact_no: string
+          experience_name: string
+          description: string
+          price: number
+          location: string
+          duration: string
+          participants: string
+          date: string
+          category: string
+          image_url?: string | null
+          status?: 'pending' | 'approved' | 'rejected'
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          company_name?: string
+          email?: string
+          contact_no?: string
+          experience_name?: string
+          description?: string
+          price?: number
+          location?: string
+          duration?: string
+          participants?: string
+          date?: string
+          category?: string
+          image_url?: string | null
+          status?: 'pending' | 'approved' | 'rejected'
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

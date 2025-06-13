@@ -13,6 +13,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from '@/lib/utils';
+import { supabase } from '@/lib/supabase';
+import { toast } from 'sonner';
 
 const categories = [
   "Adventure",
@@ -43,6 +45,7 @@ const HostExperience = () => {
     date: '',
     category: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -68,13 +71,74 @@ const HostExperience = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
-    console.log('Form submitted:', formData);
-    // For now, just show a success message
-    alert('Thank you for your submission! We will review your application and get back to you soon.');
-    navigate('/');
+    setIsSubmitting(true);
+
+    try {
+      // Upload image if exists
+      let imageUrl = '';
+      if (formData.image) {
+        try {
+          console.log('Converting image to base64...');
+          
+          // Convert image to base64
+          const reader = new FileReader();
+          const base64Promise = new Promise((resolve, reject) => {
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+          });
+          
+          reader.readAsDataURL(formData.image);
+          const base64String = await base64Promise as string;
+          
+          // Store the base64 string as the image URL
+          imageUrl = base64String;
+          console.log('Image converted successfully');
+        } catch (uploadError) {
+          console.error('Image conversion error:', uploadError);
+          toast.error('Failed to process image. Please try again.');
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
+      // Submit application to Supabase
+      const { error: insertError } = await supabase
+        .from('experiences')
+        .insert([
+          {
+            title: formData.experienceName,
+            description: formData.description,
+            image_url: imageUrl,
+            price: parseFloat(formData.price),
+            location: formData.location,
+            duration: formData.duration,
+            participants: formData.participants,
+            date: formData.date,
+            category: formData.category,
+            niche_category: null,
+            trending: false,
+            featured: false,
+            romantic: false,
+            adventurous: false,
+            group_activity: false
+          }
+        ]);
+
+      if (insertError) {
+        console.error('Database insert error:', insertError);
+        throw new Error(`Failed to save application: ${insertError.message}`);
+      }
+
+      toast.success('Application submitted successfully! We will review it and get back to you soon.');
+      navigate('/');
+    } catch (error: any) {
+      console.error('Error submitting application:', error);
+      toast.error(error.message || 'Failed to submit application. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -132,17 +196,16 @@ const HostExperience = () => {
                 />
                 <Textarea
                   name="description"
-                  placeholder="Experience Description"
+                  placeholder="Describe your experience..."
                   value={formData.description}
                   onChange={handleInputChange}
                   required
-                  className="min-h-[120px]"
                 />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4">
                   <Input
                     type="number"
                     name="price"
-                    placeholder="Price per person ($)"
+                    placeholder="Price"
                     value={formData.price}
                     onChange={handleInputChange}
                     required
@@ -154,6 +217,8 @@ const HostExperience = () => {
                     onChange={handleInputChange}
                     required
                   />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
                   <Input
                     name="duration"
                     placeholder="Duration (e.g., 2 hours)"
@@ -162,13 +227,14 @@ const HostExperience = () => {
                     required
                   />
                   <Input
-                    type="number"
                     name="participants"
                     placeholder="Max Participants"
                     value={formData.participants}
                     onChange={handleInputChange}
                     required
                   />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
                   <Input
                     type="date"
                     name="date"
@@ -209,8 +275,9 @@ const HostExperience = () => {
               <Button
                 type="submit"
                 className="w-full bg-orange-500 hover:bg-orange-600 text-white"
+                disabled={isSubmitting}
               >
-                Submit Application
+                {isSubmitting ? 'Submitting...' : 'Submit Application'}
               </Button>
             </form>
           </div>

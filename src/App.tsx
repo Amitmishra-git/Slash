@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
-import { AuthProvider } from "@/lib/auth";
+import { AuthProvider, useAuth } from "@/lib/auth";
 import Index from "./pages/Index";
 import ExperienceView from "./pages/ExperienceView";
 import CategoryExplore from "./pages/CategoryExplore";
@@ -28,6 +28,8 @@ import Settings from '@/pages/admin/Settings';
 import Customers from './pages/admin/users/Customers';
 import Providers from './pages/admin/users/Providers';
 import Experiences from './pages/admin/Experiences';
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 // Import Company Pages
 import AboutUs from "./pages/AboutUs";

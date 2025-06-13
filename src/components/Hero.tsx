@@ -96,8 +96,8 @@ const Hero = () => {
               </span>
             </h1>
             
-            <p className="text-xl md:text-2xl text-white mb-8 max-w-2xl text-shadow">
-              92% of all people prefer an Experience over a Material gift and 63% forget what they recieved a year back.
+            <p className="text-lg text-muted-foreground mb-8">
+              Discover unique experiences that create lasting memories
             </p>
             
             <div className="flex flex-col items-center justify-center">
