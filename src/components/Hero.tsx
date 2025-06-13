@@ -96,7 +96,7 @@ const Hero = () => {
               </span>
             </h1>
             
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white mb-4 sm:mb-6 md:mb-8 max-w-2xl text-shadow">
+            <p className="text-lg text-muted-foreground">
               Discover unique experiences that create lasting memories. 92% of all people prefer an Experience over a Material gift and 63% forget what they received a year back.
             </p>
             
