@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
 import { AuthProvider, useAuth } from "@/lib/auth";
+import Layout from "@/components/Layout";
 import Index from "./pages/Index";
 import ExperienceView from "./pages/ExperienceView";
 import CategoryExplore from "./pages/CategoryExplore";
